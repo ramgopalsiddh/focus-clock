@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Focus Clock: Privacy policy</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 680px; margin: 48px auto; padding: 0 16px;
+         background: #0b0f14; color: #e8eef4; line-height: 1.6; }
+  a { color: #4aa3ff; }
+  .muted { color: #9aa8b5; }
+</style>
+</head>
+<body>
+<h1>Privacy policy</h1>
+<p class="muted">Focus Clock. Last updated: 13 October 2026.</p>
+
+<h2>Summary</h2>
+<p>Focus Clock reads your calendar so it can show your meetings on the clock. Your calendar data
+stays on your clock. We do not run a server that collects, stores or sells your data.</p>
+
+<h2>What the clock accesses</h2>
+<ul>
+  <li><b>Google Calendar</b>: read-only access (<code>calendar.readonly</code>) to the events of your
+    calendars: title, start and end time, and whether an event lasts all day.</li>
+  <li><b>Microsoft Outlook</b>: read-only access to your calendar events (<code>Calendars.Read</code>).</li>
+  <li><b>iCloud</b>: your calendar events, using an app-specific password that you create and type
+    into the clock.</li>
+</ul>
+<p>The clock never creates, changes or deletes events, and does not read email, contacts or files.</p>
+
+<h2>Where your data is kept</h2>
+<ul>
+  <li>Events are downloaded directly from Google, Microsoft or Apple <b>to your clock</b> over your
+    Wi-Fi, and are kept only in the clock's memory to show today's and upcoming meetings.</li>
+  <li>The sign-in token (or iCloud app-specific password) is stored <b>only on your clock</b>, so it
+    can refresh your events.</li>
+  <li>The sign-in page on this website (<code>/focus-clock-signin/</code>) runs in your phone's
+    browser. It passes Google's one-time sign-in code to your clock on your home network and stores
+    nothing.</li>
+  <li>Your calendar data is not sent to us or to anyone else, is not used for advertising, and is
+    not used to train AI models.</li>
+</ul>
+
+<h2>Software updates</h2>
+<p>The clock checks this website about once a day for a new firmware version. That request does
+not include your calendar data or account details.</p>
+
+<h2>Removing access</h2>
+<ul>
+  <li>On the clock: <b>Settings &gt; Calendar</b> (press to disconnect), or a factory reset (hold the
+    knob for 10 seconds), deletes the stored sign-in and events from the clock.</li>
+  <li>Google: <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>,
+    remove "Focus Clock".</li>
+  <li>Microsoft: <a href="https://account.live.com/consent/Manage">account.live.com/consent/Manage</a>.</li>
+  <li>Apple: revoke the app-specific password at <a href="https://account.apple.com">account.apple.com</a>.</li>
+</ul>
+
+<h2>Google API Services User Data Policy</h2>
+<p>Focus Clock's use and transfer of information received from Google APIs adheres to the
+<a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User
+Data Policy</a>, including the Limited Use requirements.</p>
+
+<h2>Contact</h2>
+<p>Questions about privacy: <a href="mailto:ramgopalsiddh.000@gmail.com">ramgopalsiddh.000@gmail.com</a></p>
+
+<p><a href="../">Back to Focus Clock</a></p>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<!--
+  Focus Clock: Google sign-in relay page.
+  Host this single file on GitHub Pages (or any HTTPS static host).
+  1. Put your Google OAuth "Web application" client ID below.
+  2. Add this page's exact URL (with trailing slash) as an Authorized redirect URI in Google Cloud.
+  3. Put the same URL in menuconfig: Focus Clock > Calendar accounts > Google redirect page URL.
+  The page has no server side and stores nothing. It runs on the customer's phone:
+  it sends the phone to Google, then hands the one-time code to the clock on the home Wi-Fi.
+  The code is protected with PKCE: it is useless without a secret that never leaves the clock.
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Focus Clock sign-in</title>
+<style>
+  body { font-family: sans-serif; max-width: 420px; margin: 40px auto; padding: 0 16px; background: #0b0f14; color: #e8eef4; }
+  a { color: #4aa3ff; }
+</style>
+</head>
+<body>
+<p id="msg">Connecting...</p>
+<p id="retry" hidden><a id="link" href="#">Tap here to finish on the clock</a><br>
+Your phone must be on the same Wi-Fi as the clock.</p>
+<script>
+  const CLIENT_ID = "YOUR_CLIENT_ID.apps.googleusercontent.com";
+  const HERE = location.origin + location.pathname;          // must match the redirect URI exactly
+  const q = new URLSearchParams(location.search);
+  const msg = document.getElementById("msg");
+  // Only forward to private (home network) addresses.
+  const okIp = s => /^(192\.168\.\d{1,3}\.\d{1,3}|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.(1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3})$/.test(s || "");
+
+  if (q.get("ip") && q.get("n")) {
+    // Step 1: opened from the QR code on the clock -> go to Google's consent page.
+    if (!okIp(q.get("ip")) || !/^[A-Za-z0-9_-]{43}$/.test(q.get("c") || "")) {
+      msg.textContent = "Invalid clock address.";
+    } else {
+      const auth = new URL("https://accounts.google.com/o/oauth2/v2/auth");
+      auth.search = new URLSearchParams({
+        client_id: CLIENT_ID,
+        redirect_uri: HERE,
+        response_type: "code",
+        scope: "https://www.googleapis.com/auth/calendar.readonly",
+        access_type: "offline",
+        prompt: "consent",
+        code_challenge: q.get("c"),
+        code_challenge_method: "S256",
+        state: q.get("ip") + "_" + q.get("n"),
+      }).toString();
+      location.replace(auth.toString());
+    }
+  } else if (q.get("code") && q.get("state")) {
+    // Step 2: Google sent us back -> forward the code to the clock.
+    const [ip, n] = q.get("state").split("_");
+    if (!okIp(ip) || !/^[0-9a-f]{8}$/.test(n || "")) {
+      msg.textContent = "Invalid reply.";
+    } else {
+      const target = "http://" + ip + "/oauth?n=" + n + "&code=" + encodeURIComponent(q.get("code"));
+      document.getElementById("link").href = target;
+      document.getElementById("retry").hidden = false;
+      msg.textContent = "Sending the sign-in to your clock...";
+      location.replace(target);
+    }
+  } else {
+    msg.textContent = q.get("error") ? "Google said: " + q.get("error") : "Scan the QR code on your Focus Clock.";
+  }
+</script>
+</body>
+</html>
